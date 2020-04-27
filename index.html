@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDC charm</title>
+</head>
+<style>
+    body {
+        height: 100%;
+        text-align: center;
+    }
+
+    div#content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+    .circle {
+        display: inline-block;
+        margin: 10px;
+        width: 20px;
+        height: 20px;
+        /* background-color: grey; */
+        border: 1px solid grey;
+    }
+
+    #times,
+    #prompt {
+        display: none;
+    }
+</style>
+
+<body>
+
+    <!-- EDC, everyday carry, glasses, id-->
+    <!-- prevent -->
+    <div id='content'>
+        <!-- <p>handle for self, rim for others, coin for world</p> -->
+        <div>
+            <span class='circle' id='card'></span>
+            <span class='circle' id='key'></span>
+            <span class='circle' id='phone'></span>
+        </div>
+        <h1>money for food, <br />key to get home, <br />phone for direction and human connection</h1>
+        <!-- one for sorrow, two for joy -->
+        <p id='prompt'></p>
+        <p id='times'></p>
+    </div>
+</body>
+<script>
+    let card = document.getElementById('card');
+    let key = document.getElementById('key');
+    let phone = document.getElementById('phone');
+
+    var socket = io.connect();
+    socket.on('connect', function () {
+        console.log("Connected");
+    });
+
+    socket.on('serialdata', function (data) {
+        //console.log(typeof data);
+        console.log(data);
+        // data = data * 2;
+        // console.log(document.body.style.backgroundColor);
+        // document.body.style.backgroundColor = "rgb(" + data.toString() + ",0,0)";
+        // var theactualdata = data.values();
+        // //for (var i=0; i < theactualdata.length; i++) {
+        // for (let d of theactualdata) { 
+        // 	console.log(d);
+        // }
+    });
+
+
+    let charm = [];
+    let prompts = [
+        "something old, borrowed, blue",
+        "anything made from iron",
+        "red underwear",
+        "silver dollar",
+        "favorite shirt",
+        "jewelry",
+        "gems, stones",
+        "necklace",
+        "goat",
+        "pair of socks",
+        "family heirloom",
+        "locket",
+        "horse shoe",
+        "rabbit's foot",
+        "ladybird beetle",
+        "pocket lighter",
+        "something green",
+        "acorns",
+        "splashing water",
+        "four leaf clover"
+    ];
+    let advices = [];
+
+    let rand = Math.random();
+    let total = prompts.length;
+    let randIndex = Math.floor(rand * total);
+    console.log(randIndex);
+
+    let prompt = document.getElementById("prompt");
+    console.log(prompt);
+    prompt.innerHTML = prompts[randIndex];
+    let times = document.getElementById('times');
+</script>
+
+</html>
