@@ -31,28 +31,24 @@ var SerialPort = require('serialport');
 var serialPort = new SerialPort("/dev/cu.usbmodem14101", {
 	baudRate: 9600
 });
+serialPort.on("open", function () {
 
-io.sockets.on('connection',
-	function (socket) {
-		console.log("We have a new client: " + socket.id);
-		socket.on('serialdata', function (data) {
-			// console.log(data);
-			//console.log(data.readInt8(0));
-			// for (var i = 0; i < data.length; i++) {
-			// 	io.sockets.emit('serialdata', data.readInt8(i));
-			// }
-			// io.emit('serialdata', data);
-		});
+	var socket = require('socket.io-client')('192.168.1.49:9000');
+	socket.on('connect', function () {
+		console.log("Connected");
+	});
+	socket.on('event', function (data) {
+		console.log("Event ", data);
 
-		socket.on('disconnect', function () {
-			console.log("Client has disconnected");
-		});
+	});
+	socket.on('disconnect', function () {
+		console.log("disconnect");
+	});
 
-		serialPort.on("data", function (data) {
-			let decodeBuffer = data.toString('utf8');
-			console.log(data.toString('utf8'))
-			socket.emit('serialdata', data);
-			// console.log(data);
-		});
-	}
-);
+	serialPort.on("data", function (data) {
+		let decodeBuffer = data.toString('utf8');
+		console.log(decodeBuffer);
+		socket.emit('serialdata', decodeBuffer);
+	});
+
+});
